@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: casino-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: online_casino
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - casino-network
+
+  # MongoDB
+  mongodb:
+    image: mongo:6
+    container_name: casino-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: online_casino
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - casino-network
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: casino-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - casino-network
+
+  # pgAdmin (PostgreSQL 관리 도구)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: casino-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@casino.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - casino-network
+
+  # Mongo Express (MongoDB 관리 도구)
+  mongo-express:
+    image: mongo-express
+    container_name: casino-mongo-express
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongodb:27017/
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    networks:
+      - casino-network
+
+  # Redis Commander (Redis 관리 도구)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: casino-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8082:8081"
+    depends_on:
+      - redis
+    networks:
+      - casino-network
+
+networks:
+  casino-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  redis_data:
