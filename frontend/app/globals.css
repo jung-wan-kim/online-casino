@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 10 10 15;
+    --foreground: 255 255 255;
+  }
+
+  * {
+    border-color: hsl(var(--background));
+  }
+
+  body {
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  /* Neon text effect */
+  .neon-text {
+    text-shadow:
+      0 0 7px #fff,
+      0 0 10px #fff,
+      0 0 21px #fff,
+      0 0 42px #FFD700,
+      0 0 82px #FFD700,
+      0 0 92px #FFD700,
+      0 0 102px #FFD700,
+      0 0 151px #FFD700;
+  }
+
+  /* Card styles */
+  .card {
+    @apply rounded-lg shadow-lg transition-all duration-300;
+  }
+
+  /* Button styles */
+  .btn {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105;
+  }
+
+  .btn-primary {
+    @apply bg-casino-gold text-casino-dark hover:bg-casino-gold-light;
+  }
+
+  .btn-secondary {
+    @apply bg-casino-dark-200 text-white hover:bg-casino-dark-300 border border-casino-gold/30;
+  }
+
+  /* Table felt texture */
+  .table-felt {
+    background:
+      linear-gradient(135deg, #0B5D1E 0%, #084416 100%),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+      );
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-casino-dark-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-casino-gold/50 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-casino-gold;
+}
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
